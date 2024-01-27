@@ -1,0 +1,20 @@
+{
+   "compilerOptions": {
+      "target": "ES2022",
+      "module": "ESNext", // Use ESNext for top-level await support
+      "moduleResolution": "node",
+      "outDir": "./dist",
+      "rootDir": "./",
+      "strict": true,
+      "esModuleInterop": true,
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true,
+      "allowSyntheticDefaultImports": true,
+      "downlevelIteration": true,
+      "allowJs": true,
+      // "incremental": true
+   },
+   "include": ["src/**/*.ts", "src/**/*.js"],
+   "exclude": ["node_modules"],
+   "assets": ["src/**/*.sql", "src/**/*.json"],
+}
