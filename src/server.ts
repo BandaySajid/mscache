@@ -91,7 +91,6 @@ function get_command(
    key: string,
    entries: Buffer[],
 ): Buffer | null | string {
-   console.log('running commmand with key:', key);
    if (entries.length > 0) {
       return 'ERROR: Invalid arguments for "get" command';
    }

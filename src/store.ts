@@ -1,5 +1,4 @@
 import { HashData, Storer, StoreData, List, Hash } from './types.js';
-import crypto from 'node:crypto';
 
 type ListNode<T> = {
    next?: ListNode<T>;
