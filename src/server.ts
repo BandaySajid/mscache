@@ -18,7 +18,8 @@ const COMMANDS: Command[] = [
    { name: 'prepend', run: prepend_command, type: 'LIST' } as Command,
    { name: 'popl', run: popL_command, type: 'LIST' } as Command,
    { name: 'popr', run: popR_command, type: 'LIST' } as Command,
-   { name: 'del', run: del_command, type: 'GLOBAL' } as Command,
+   { name: 'slice', run: slice_command, type: 'LIST' } as Command,
+   { name: 'del', run: del_command, type: 'GLOBAL' } as Command
 ];
 
 function hset_command(
@@ -164,6 +165,28 @@ function popR_command(
    }
 
    return store.popR(key, count);
+}
+
+function slice_command(
+   store: Store,
+   key: string,
+   entries: Buffer[],
+): Buffer[] | string | null{
+   if (entries.length <= 1 || entries.length > 2) {
+      return 'ERROR: Invalid arguments for "slice" command';
+   }
+
+   let indexes = [];
+
+   for (const entry of entries) {
+      const idx = Number(entry.toString());
+      if (isNaN(idx)) {
+         return 'ERROR: Invalid arguments for "slice" command';
+      }
+      indexes.push(idx);
+   }
+
+   return store.slice(key, indexes[0], indexes[1]);
 }
 
 function del_command(

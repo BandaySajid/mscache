@@ -102,8 +102,31 @@ class msList<T> implements List<T> {
       return head?.value;
    }
 
-   slice(start_idx: number, end_idx: number) {
-      //TODO
+   slice(start_idx: number, end_idx: number): T[] | undefined {
+      if (this.length <= 0) {
+         return undefined;
+      }
+
+      const result = [];
+      let curr = this.head;
+
+      if (start_idx > this.length) {
+         return undefined;
+      }
+
+      if (end_idx === -1) {
+         end_idx = this.length;
+      }
+
+      for (let i = start_idx; i <= end_idx && curr; i++) {
+         result.push(curr.value);
+         if (curr.index === end_idx) {
+            break;
+         }
+         curr = curr.next;
+      }
+
+      return result;
    }
 }
 
@@ -286,8 +309,16 @@ class Store implements Storer {
       return del_count;
    }
 
-   show() {
-      console.log('Store:', this.#store);
+   slice(key: string, start_idx: number, end_idx: number): Buffer[] | null {
+      let list = this.#store.get(key) as msList<Buffer>;
+
+      if (!list) {
+         return null;
+      }
+
+      const result = list.slice(start_idx, end_idx);
+
+      return result ? result : null;
    }
 }
 
