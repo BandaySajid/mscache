@@ -1,4 +1,5 @@
 import { HashData, Storer, StoreData, List, Hash } from './types.js';
+import cron from './utils/cron.js';
 
 type ListNode<T> = {
    next?: ListNode<T>;
@@ -216,7 +217,6 @@ class Store implements Storer {
 
    get(key: string): Buffer | null {
       const value = this.#store.get(key) as Buffer;
-      console.log('found value from map:', value);
       return value ? value : null;
    }
 
@@ -299,16 +299,6 @@ class Store implements Storer {
       return buffers.length > 0 ? buffers : null;
    }
 
-   del(keys: string[]): number {
-      let del_count = 0;
-      for (const key of keys) {
-         this.#store.delete(key);
-         del_count++;
-      }
-
-      return del_count;
-   }
-
    slice(key: string, start_idx: number, end_idx: number): Buffer[] | null {
       let list = this.#store.get(key) as msList<Buffer>;
 
@@ -319,6 +309,24 @@ class Store implements Storer {
       const result = list.slice(start_idx, end_idx);
 
       return result ? result : null;
+   }
+
+   //GLOBAL
+   del(keys: string[]): number {
+      let del_count = 0;
+      for (const key of keys) {
+         this.#store.delete(key);
+         del_count++;
+      }
+
+      return del_count;
+   }
+
+   expire(key: string, seconds: number) {
+      const date = new Date(Date.now() + seconds * 1000);
+      cron(date, () => {
+         this.#store.delete(key);
+      });
    }
 }
 

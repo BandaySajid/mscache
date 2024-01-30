@@ -19,7 +19,7 @@ const COMMANDS: Command[] = [
    { name: 'popl', run: popL_command, type: 'LIST' } as Command,
    { name: 'popr', run: popR_command, type: 'LIST' } as Command,
    { name: 'slice', run: slice_command, type: 'LIST' } as Command,
-   { name: 'del', run: del_command, type: 'GLOBAL' } as Command
+   { name: 'del', run: del_command, type: 'GLOBAL' } as Command,
 ];
 
 function hset_command(
@@ -171,7 +171,7 @@ function slice_command(
    store: Store,
    key: string,
    entries: Buffer[],
-): Buffer[] | string | null{
+): Buffer[] | string | null {
    if (entries.length <= 1 || entries.length > 2) {
       return 'ERROR: Invalid arguments for "slice" command';
    }
@@ -236,7 +236,7 @@ function handle_message(
          return `ERROR: Invalid Command ${operation}`;
       }
 
-      const key = spllitted_buffer[1];
+      const key = spllitted_buffer[1].toString();
 
       if (!key) {
          return `ERROR: Invalid arguments for command ${operation}`;
@@ -244,7 +244,35 @@ function handle_message(
 
       let entries: Buffer[] = spllitted_buffer.slice(2);
 
-      return command.run(store, key.toString(), entries);
+      let ex;
+
+      const if_expire_entry = entries[entries.length - 2];
+
+      if (if_expire_entry?.length === 2) {
+         //running this statement below so that we dont allocate new space for a large buffer, this will only run if the buffer length is 2.
+         if (entries[entries.length - 2].toString() === 'ex') {
+            ex = Number(entries[entries.length - 1]);
+            entries.pop();
+         }
+
+         if (ex && (isNaN(ex) || ex <= 0)) {
+            return 'ERROR: Expiry for the key should be provided in seconds (min:1)';
+         }
+
+         entries.pop();
+      }
+
+      let result = command.run(store, key, entries);
+
+      if (!result) {
+         return result;
+      }
+
+      if (ex) {
+         store.expire(key, ex);
+      }
+
+      return result;
    } catch (err) {
       console.log('cannot handle message', err);
       return `ERROR: Internal server error!`;
