@@ -1,6 +1,6 @@
 import tcp from 'node:net';
 import Store from './store.js';
-import { COMMANDS } from './commands.js';
+import { COMMANDS } from './commander.js';
 
 function handle_message(
    message: Buffer,

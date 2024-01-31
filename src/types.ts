@@ -31,6 +31,7 @@ interface Storer {
    popL(key: string, count: number): Buffer[] | null;
    popR(key: string, count: number): Buffer[] | null;
    del(keys: string[]): number;
+   expire(key: string, seconds: number): void;
 }
 
-export { HashData, Storer, StoreData, Hash, List };
+export { HashData, Storer, StoreData, Hash, List};
