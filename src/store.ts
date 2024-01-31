@@ -4,7 +4,6 @@ import cron from './utils/cron.js';
 type ListNode<T> = {
    next?: ListNode<T>;
    prev?: ListNode<T>;
-   index?: number;
    value: T;
 };
 
@@ -27,8 +26,6 @@ class msList<T> implements List<T> {
 
       this.length++;
 
-      node.index = this.length - 1;
-
       if (!this.head) {
          this.head = this.tail = node;
          return;
@@ -46,8 +43,6 @@ class msList<T> implements List<T> {
       };
 
       this.length++;
-
-      node.index = this.length - 1;
 
       if (!this.tail) {
          this.tail = this.head = node;
@@ -67,12 +62,15 @@ class msList<T> implements List<T> {
 
       this.length--;
 
-      if (this.length === 1) {
+      if (this.length === 0) {
+         const value = this.tail.value;
          this.head = this.tail = undefined;
+         return value;
       }
 
       const tail = this.tail;
       const prev = this.tail?.prev;
+
       if (prev) {
          prev.next = undefined;
       }
@@ -88,8 +86,10 @@ class msList<T> implements List<T> {
 
       this.length--;
 
-      if (this.length === 1) {
+      if (this.length === 0) {
+         const value = this.head.value;
          this.head = this.tail = undefined;
+         return value;
       }
 
       const head = this.head;
@@ -121,9 +121,6 @@ class msList<T> implements List<T> {
 
       for (let i = start_idx; i <= end_idx && curr; i++) {
          result.push(curr.value);
-         if (curr.index === end_idx) {
-            break;
-         }
          curr = curr.next;
       }
 
@@ -166,8 +163,8 @@ class msHash implements Hash {
 class Store implements Storer {
    #store: StoreData;
 
-   constructor(storage: StoreData) {
-      this.#store = storage;
+   constructor() {
+      this.#store = new Map();
    }
 
    hset(key: string, entries: HashData[]): void {
@@ -264,11 +261,17 @@ class Store implements Storer {
          return null;
       }
 
-      let length = list.length + (list.length - count);
+      if (count > list.length) {
+         count = list.length;
+      }
+
+      if (count <= 0) {
+         return null;
+      }
 
       const buffers: Buffer[] = [];
 
-      for (let i = 0; i < length; i++) {
+      for (let i = 0; i < count; i++) {
          const rem_val = list.popL();
          if (rem_val) {
             buffers.push(rem_val);
@@ -285,11 +288,17 @@ class Store implements Storer {
          return null;
       }
 
-      let length = list.length + (list.length - count);
+      if (count > list.length) {
+         count = list.length;
+      }
+
+      if (count <= 0) {
+         return null;
+      }
 
       const buffers: Buffer[] = [];
 
-      for (let i = 0; i < length; i++) {
+      for (let i = 0; i < count; i++) {
          const rem_val = list.popR();
          if (rem_val) {
             buffers.push(rem_val);
@@ -315,8 +324,8 @@ class Store implements Storer {
    del(keys: string[]): number {
       let del_count = 0;
       for (const key of keys) {
-         this.#store.delete(key);
-         del_count++;
+         const deleted = this.#store.delete(key);
+         deleted && del_count++;
       }
 
       return del_count;

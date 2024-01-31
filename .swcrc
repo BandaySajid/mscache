@@ -19,6 +19,7 @@
     "strictMode": false,
     "noInterop": false,
     "lazy": false
+	 "resolveExtensions": [".js", ".ts"]
   },
   "minify": true
 }
