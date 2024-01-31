@@ -11,7 +11,7 @@
 git clone https://github.com/BandaySajid/mscache
 ```
 
-### Install dependencies (dev)
+### Install dependencies
 ```bash
 npm install
 ```
@@ -22,7 +22,7 @@ To use `mscache`:
 
 ### Start the server
 ```bash
-npm run dev
+npm run build && npm start
 ```
 
 - You can use any TCP client to connect to `mscache` (PORT: 9898) for now; here we will be using netcat.
@@ -132,13 +132,34 @@ del key1 key2 key3
 - set <key> ex <seconds>
 
 ```bash
-set name Halfi ex 9
+set name halfi ex 9
 ```
 
 ## Contributing
+Feel free to contribute to the project 
 
-Feel free to contribute to the project by opening issues or submitting pull requests on our [GitHub repository](https://github.com/BandaySajid/mscache).
+Requirements:
+- Node version >=20
+
+### Clone the Repo
+```bash
+git clone https://github.com/BandaySajid/mscache
+```
+
+### Install dependencies
+```bash
+npm install
+```
+
+### Test the program.
+```bash
+npm test
+```
+
+### Start the dev server
+```bash
+npm run dev
+```
 
 ## License
-
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
