@@ -58,6 +58,10 @@ function handle_message(
          entries.pop();
       }
 
+      if (entries.length < 1 || entries[0]?.length < 1) {
+         return `ERROR: Invalid arguments for command ${operation}`;
+      }
+
       let result = command.run(store, key, entries);
 
       if (!result) {
