@@ -10,7 +10,7 @@ import {
    popR_command,
    popL_command,
    slice_command,
-} from '../src/commander.js';
+} from '../src/commando.js';
 
 import Store from '../src/store.js';
 import assert from 'assert';

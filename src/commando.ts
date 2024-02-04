@@ -145,9 +145,9 @@ export function popL_command(
       return 'ERROR: Invalid arguments for "popL" command';
    }
 
-	if(count <= 0){
-		return 'ERROR: count should be a positive integer for "popL" command'
-	}
+   if (count <= 0) {
+      return 'ERROR: count should be a positive integer for "popL" command';
+   }
 
    return store.popL(key, count);
 }
@@ -171,9 +171,9 @@ export function popR_command(
       return 'ERROR: Invalid arguments for "popR" command';
    }
 
-	if(count <= 0){
-		return 'ERROR: count should be a positive integer for "popR" command'
-	}
+   if (count <= 0) {
+      return 'ERROR: count should be a positive integer for "popR" command';
+   }
 
    return store.popR(key, count);
 }

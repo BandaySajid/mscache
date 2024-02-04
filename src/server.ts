@@ -1,6 +1,6 @@
 import tcp from 'node:net';
 import Store from './store.js';
-import { COMMANDS } from './commander.js';
+import { COMMANDS } from './commando.js';
 
 function handle_message(
    message: Buffer,
@@ -58,7 +58,12 @@ function handle_message(
          entries.pop();
       }
 
-      if (entries.length < 1 || entries[0]?.length < 1) {
+      if (
+         (command.name !== 'get' &&
+            command.name !== 'del' &&
+            entries.length < 1) ||
+         entries[0]?.length < 1
+      ) {
          return `ERROR: Invalid arguments for command ${operation}`;
       }
 
@@ -92,6 +97,13 @@ function init_server(port: number, store: Store) {
          }
          socket.write(Buffer.isBuffer(result) ? result : result.toString());
       });
+   });
+
+   server.on('error', (err) => {
+      console.error(
+         '[SERVER-ERROR]: An error has occured with MSCACHE server:',
+         err,
+      );
    });
 
    server.listen(port, () => {
