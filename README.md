@@ -67,6 +67,14 @@ hset someUser name msCacheUser email msUser@example.com age 18
 hget someUser name
 ```
 
+#### Get all Hash fields
+
+- hgetall <key>
+
+```bash
+hgetall someUser
+```
+
 #### Delete Hash Fields
 
 - hdel <key> <field_key1> <field_key2> <field_key3>

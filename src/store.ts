@@ -149,6 +149,16 @@ class msHash implements Hash {
       return value;
    }
 
+   hgetAll() {
+      let entries: (string | Buffer)[] = [];
+      this.#store.forEach((value: Buffer, key: string) => {
+         entries.push(key);
+         entries.push(value);
+      });
+
+      return entries;
+   }
+
    hdel(key: string): number {
       const deleted = this.#store.delete(key);
 
@@ -189,6 +199,16 @@ class Store implements Storer {
 
       const value = hash.hget(hkey);
       return value ? value : null;
+   }
+
+   hgetAll(key: string): (string | Buffer)[] | null {
+      const hash = this.#store.get(key) as msHash;
+
+      if (!hash) {
+         return null;
+      }
+
+      return hash.hgetAll();
    }
 
    hdel(key: string, hkeys: string[]): number {

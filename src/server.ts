@@ -58,10 +58,10 @@ function handle_message(
          entries.pop();
       }
 
+      const cmds_to_check = ['get', 'del', 'hgetall'];
+
       if (
-         (command.name !== 'get' &&
-            command.name !== 'del' &&
-            entries.length < 1) ||
+         !(cmds_to_check.includes(command.name)) && entries.length < 1 ||
          entries[0]?.length < 1
       ) {
          return `ERROR: Invalid arguments for command ${operation}`;
@@ -95,6 +95,9 @@ function init_server(port: number, store: Store) {
          if (!result) {
             return socket.write('null');
          }
+
+			// arrays will be converted to strings - 'element1,element2';
+			// fix it, if it causes performance problems
          socket.write(Buffer.isBuffer(result) ? result : result.toString());
       });
    });

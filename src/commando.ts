@@ -10,6 +10,7 @@ type Command = {
 export const COMMANDS: Command[] = [
    { name: 'hset', run: hset_command, type: 'HASH' } as Command,
    { name: 'hget', run: hget_command, type: 'HASH' } as Command,
+   { name: 'hgetall', run: hget_all_command, type: 'HASH' } as Command,
    { name: 'hdel', run: hdel_command, type: 'HASH' } as Command,
    { name: 'set', run: set_command, type: 'STRING' } as Command,
    { name: 'get', run: get_command, type: 'STRING' } as Command,
@@ -57,6 +58,15 @@ export function hget_command(
    }
 
    return store.hget(key, entries[0].toString());
+}
+
+export function hget_all_command(
+   store: Store,
+   key: string,
+	_: Buffer[]
+): (string | Buffer)[] | null | string {
+	const result = store.hgetAll(key);
+   return result;
 }
 
 export function hdel_command(
@@ -205,10 +215,6 @@ export function del_command(
    key: string,
    entries: Buffer[],
 ): number | string {
-   if (entries.length <= 0) {
-      return 'ERROR: Invalid arguments for "del" command';
-   }
-
    const keys: string[] = [key];
 
    for (const entry of entries) {

@@ -10,6 +10,7 @@ import {
    popR_command,
    popL_command,
    slice_command,
+   hget_all_command,
 } from '../src/commando.js';
 
 import Store from '../src/store.js';
@@ -50,6 +51,13 @@ describe('testing core functionality / commmands test', () => {
          hget_command(store, 'msUser', buffered(['name'])),
          'name_is_ms',
       );
+   });
+
+   it('hgetall command should return the keys and the values associated with the hash key', () => {
+      assert.deepEqual(hget_all_command(store, 'msUser', []), [
+         'name',
+         Buffer.from('name_is_ms'),
+      ]);
    });
 
    it('hdel command should delete the key-value associated with the key in hash and return the delete count', () => {
