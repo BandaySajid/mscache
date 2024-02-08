@@ -63,9 +63,9 @@ export function hget_command(
 export function hget_all_command(
    store: Store,
    key: string,
-	_: Buffer[]
+   _: Buffer[],
 ): (string | Buffer)[] | null | string {
-	const result = store.hgetAll(key);
+   const result = store.hgetAll(key);
    return result;
 }
 
@@ -93,7 +93,7 @@ export function set_command(
    entries: Buffer[],
 ): string {
    if (entries.length > 1 || entries.length <= 0) {
-      return 'ERROR: Syntax error.';
+      return 'ERROR: Invalid arguments for "set" command';
    }
    store.set(key, entries[0]);
 
