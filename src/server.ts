@@ -19,6 +19,8 @@ function handle_message(
 
       let entries: Buffer[] = [];
 
+		buffer[buffer.length - 1] = 10
+
       let curr_idx = 0;
       let start_idx = 0;
 
@@ -98,7 +100,8 @@ function init_server(port: number, store: Store) {
       );
    });
 
-   server.listen(port, () => { console.log('MSCACHE: Server running on:', server.address());
+   server.listen(port, () => {
+      console.log('MSCACHE: Server running on:', server.address());
    });
 }
 

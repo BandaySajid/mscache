@@ -351,6 +351,8 @@ class Store implements Storer {
       return del_count;
    }
 
+	show(){console.log(this.#store)}
+
    /*expire(key: string, seconds: number) {
       const date = new Date(Date.now() + seconds * 1000);
       cron(date, () => {
