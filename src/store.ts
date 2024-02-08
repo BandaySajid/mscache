@@ -351,12 +351,12 @@ class Store implements Storer {
       return del_count;
    }
 
-   expire(key: string, seconds: number) {
+   /*expire(key: string, seconds: number) {
       const date = new Date(Date.now() + seconds * 1000);
       cron(date, () => {
          this.#store.delete(key);
       });
-   }
+   }*/
 }
 
 export default Store;

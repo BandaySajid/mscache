@@ -4,7 +4,12 @@ import { HashData } from './types.js';
 type Command = {
    name: string;
    type: 'STRING' | 'HASH' | 'LIST' | 'GLOBAL';
-   run(store: Store, key: string, entries: Buffer[]): Buffer | string | number;
+   run(
+      store: Store,
+      key: string,
+      entries: Buffer[],
+      expiry?: number,
+   ): Buffer | string | number;
 };
 
 export const COMMANDS: Command[] = [
